@@ -10,6 +10,11 @@ local function define_colors()
     attributes.fg = colors.text
     api.nvim_set_hl(namespace, name, attributes)
   end
+  for _, name in ipairs({ "SpellBad", "SpellCap", "SpellLocal", "SpellRare" }) do
+    local attributes = api.nvim_get_hl(0, { name = name, link = false })
+    attributes.fg = nil
+    api.nvim_set_hl(namespace, name, attributes)
+  end
   for _, name in ipairs({
     "@markup.link",
     "@markup.link.label",
