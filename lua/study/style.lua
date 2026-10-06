@@ -10,11 +10,6 @@ local function define_colors()
     attributes.fg = colors.text
     api.nvim_set_hl(namespace, name, attributes)
   end
-  for _, name in ipairs({ "SpellBad", "SpellCap", "SpellLocal", "SpellRare" }) do
-    local attributes = api.nvim_get_hl(0, { name = name, link = false })
-    attributes.fg = nil
-    api.nvim_set_hl(namespace, name, attributes)
-  end
   for _, name in ipairs({
     "@markup.link",
     "@markup.link.label",
@@ -41,6 +36,7 @@ local function define_colors()
 end
 
 local function refresh()
+  local spell = require("study.config").options.spell
   for _, window in ipairs(api.nvim_list_wins()) do
     local buffer = api.nvim_win_get_buf(window)
     local is_study = api.nvim_buf_get_name(buffer):match("%.study$")
@@ -49,12 +45,20 @@ local function refresh()
     if is_study then
       if previous[window] == nil then
         local original = api.nvim_get_hl_ns({ winid = window })
-        previous[window] = original == namespace and -1 or original
+        previous[window] = {
+          namespace = original == namespace and -1 or original,
+          spell = vim.wo[window].spell,
+        }
       end
       api.nvim_win_set_hl_ns(window, namespace)
+      vim.wo[window].spell = spell
+      previous[window].applied_spell = spell
     elseif previous[window] ~= nil then
       if api.nvim_get_hl_ns({ winid = window }) == namespace then
-        api.nvim_win_set_hl_ns(window, previous[window])
+        api.nvim_win_set_hl_ns(window, previous[window].namespace)
+      end
+      if vim.wo[window].spell == previous[window].applied_spell then
+        vim.wo[window].spell = previous[window].spell
       end
       previous[window] = nil
     end

@@ -25,6 +25,7 @@ CONFIGURATION                                          *study-configuration*
     root = "~/study", -- Default: STUDY_ROOT or the current user's home/study.
     binary = nil,    -- Default: target/release/study[.exe] or study in PATH.
     timeout = 5000,
+    spell = false,   -- Set true to use automatic spell highlighting.
     mappings = { open = "<CR>" }, -- false disables the mapping.
     colors = {
       text = "#FFFFFF",
@@ -35,6 +36,8 @@ CONFIGURATION                                          *study-configuration*
 <
 The .study extension uses Markdown filetype, syntax, and optional Treesitter.
 Colors apply to study windows only, and retain the current theme background.
+Automatic spelling highlights are disabled in study windows by default.
+The previous spell setting is restored when leaving the study window.
 Paths in links are resolved relative to the document.
 Only HTTP(S) URLs are opened in the system browser.
 

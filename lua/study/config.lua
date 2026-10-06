@@ -3,6 +3,7 @@ local defaults = {
   root = nil,
   binary = nil,
   timeout = 5000,
+  spell = false,
   mappings = { open = "<CR>" },
   colors = { text = "#FFFFFF", link = "#61AFEF", heading = "#FFFFFF" },
 }
