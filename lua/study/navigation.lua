@@ -23,7 +23,7 @@ function M.open(target)
       return heading(target.fragment)
     end
   elseif target.kind == "directory" then
-    vim.cmd.edit(vim.fn.fnameescape(target.path))
+    return require("study.explorer").open(target.path)
   elseif target.kind == "anchor" then
     return heading(target.fragment)
   end

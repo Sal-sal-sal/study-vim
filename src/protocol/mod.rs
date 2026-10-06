@@ -13,6 +13,9 @@ use std::{
 #[derive(Deserialize)]
 #[serde(tag = "action", rename_all = "snake_case", deny_unknown_fields)]
 enum Request {
+    Browse {
+        path: PathBuf,
+    },
     Heading {
         text: String,
         fragment: String,
@@ -31,6 +34,9 @@ enum Request {
 
 fn dispatch(request: Request) -> Result<Value> {
     match request {
+        Request::Browse { path } => Ok(serde_json::to_value(crate::study::directory::browse(
+            &path,
+        )?)?),
         Request::Heading { text, fragment } => {
             Ok(json!({ "line": crate::markdown::anchors::heading_line(&text, &fragment)? }))
         }
