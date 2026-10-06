@@ -4,3 +4,11 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+anyhow = "1.0.104"
+rt = "0.20.1"
+tokio = { version = "1.53.2", features = ["rt"] }
+
+
+[[bin]]
+name = "study"
+path = "src/main.rs"
