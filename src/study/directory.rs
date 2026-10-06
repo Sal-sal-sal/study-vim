@@ -19,6 +19,14 @@ pub struct Entry {
     pub directory: bool,
 }
 
+pub fn create_dir_safe(root: &Path, topic: &str) -> Result<PathBuf> {
+    super::validation::validate_topic(topic)?;
+    let path = root.join(topic);
+    fs::create_dir_all(&path)
+        .with_context(|| format!("Cannot create topic directory {}", path.display()))?;
+    Ok(path)
+}
+
 pub fn browse(path: &Path) -> Result<Directory> {
     ensure!(path.is_dir(), "Not a directory: {}", path.display());
     let mut entries = fs::read_dir(path)

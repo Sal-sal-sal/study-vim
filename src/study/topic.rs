@@ -23,7 +23,7 @@ pub fn folder_link(topic: &str) -> String {
 }
 
 pub fn create_topic(root: &Path, topic: &str) -> Result<Topic> {
-    let directory = crate::api::command::create::create_dir_safe(root, topic)?;
+    let directory = super::directory::create_dir_safe(root, topic)?;
     let file = directory.join(format!("{topic}.study"));
     match OpenOptions::new().write(true).create_new(true).open(&file) {
         Ok(mut output) => {
