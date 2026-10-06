@@ -1,4 +1,5 @@
 use anyhow::{Context, Result, ensure};
+use percent_encoding::{NON_ALPHANUMERIC, utf8_percent_encode};
 use serde::Serialize;
 use std::{
     fs::OpenOptions,
@@ -10,6 +11,15 @@ use std::{
 pub struct Topic {
     pub directory: PathBuf,
     pub file: PathBuf,
+}
+
+pub fn folder_link(topic: &str) -> String {
+    let label = topic
+        .replace('\\', "\\\\")
+        .replace('[', "\\[")
+        .replace(']', "\\]");
+    let path = utf8_percent_encode(topic, NON_ALPHANUMERIC);
+    format!("- [{label}](./{path}/)")
 }
 
 pub fn create_topic(root: &Path, topic: &str) -> Result<Topic> {

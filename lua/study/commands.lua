@@ -54,7 +54,42 @@ function M.open(explicit)
   return true
 end
 
+function M.folder(topic)
+  local document = api.nvim_buf_get_name(0)
+  if not document:match("%.study$") or not vim.bo.modifiable then
+    report("Open an editable .study file first")
+    return
+  end
+  local result, error = backend.request({ action = "folder", document = document, topic = topic })
+  if error then
+    report(error)
+    return
+  end
+  local lines = api.nvim_buf_get_lines(0, 0, -1, false)
+  if vim.tbl_contains(lines, result.link) then
+    return
+  end
+  local start, ending
+  for index, line in ipairs(lines) do
+    if line == "## Папки" then
+      start = index
+    elseif start and line:match("^##? ") then
+      ending = index - 1
+      break
+    end
+  end
+  if not start then
+    api.nvim_buf_set_lines(0, -1, -1, false, { "", "## Папки", "", result.link })
+  else
+    local insert = ending or #lines
+    api.nvim_buf_set_lines(0, insert, insert, false, { result.link })
+  end
+end
+
 function M.setup()
+  api.nvim_create_user_command("StudyFolder", function(command)
+    M.folder(command.args)
+  end, { nargs = "+", force = true, desc = "Create a subtopic and add its folder link" })
   api.nvim_create_user_command("Study", function(command)
     M.create(command.args)
   end, { nargs = "+", force = true, desc = "Create or open a study topic" })

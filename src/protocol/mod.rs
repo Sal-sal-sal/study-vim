@@ -13,6 +13,10 @@ use std::{
 #[derive(Deserialize)]
 #[serde(tag = "action", rename_all = "snake_case", deny_unknown_fields)]
 enum Request {
+    Folder {
+        document: PathBuf,
+        topic: String,
+    },
     Browse {
         path: PathBuf,
     },
@@ -34,6 +38,13 @@ enum Request {
 
 fn dispatch(request: Request) -> Result<Value> {
     match request {
+        Request::Folder { document, topic } => {
+            let parent = document
+                .parent()
+                .context("Study document has no parent directory")?;
+            let created = create_topic(parent, &topic)?;
+            Ok(json!({ "topic": created, "link": crate::study::topic::folder_link(&topic) }))
+        }
         Request::Browse { path } => Ok(serde_json::to_value(crate::study::directory::browse(
             &path,
         )?)?),
