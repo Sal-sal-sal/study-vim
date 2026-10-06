@@ -9,6 +9,7 @@ function M.setup(options)
   vim.filetype.add({ extension = { study = "markdown" } })
   require("study.commands").setup()
   require("study.buffers").setup()
+  require("study.style").setup()
 end
 
 return M

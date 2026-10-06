@@ -7,7 +7,8 @@ local plan = vim.fs.joinpath(root, "Linear algebra", "Linear algebra.study")
 assert(vim.uv.fs_realpath(vim.api.nvim_buf_get_name(0)) == vim.uv.fs_realpath(plan))
 assert(vim.bo.filetype == "markdown")
 assert(vim.fn.getcwd():match("Linear algebra$"))
-local lines = { "# Linear algebra", "", "## Ссылки", "", "[Course](https://example.org)", "", "My notes" }
+local lines =
+  { "# Linear algebra", "", "## Ссылки", "", "[Course](https://example.org)", "", "My notes" }
 vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
 local url
 vim.ui.open = function(value)

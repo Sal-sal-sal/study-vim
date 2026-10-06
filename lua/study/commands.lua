@@ -7,7 +7,11 @@ local function report(error)
 end
 
 function M.create(topic)
-  local result, error = backend.request({ action = "create", topic = topic, root = require("study.config").options.root })
+  local result, error = backend.request({
+    action = "create",
+    topic = topic,
+    root = require("study.config").options.root,
+  })
   if error then
     report(error)
     return
@@ -63,7 +67,11 @@ function M.setup()
   api.nvim_create_user_command("StudyOpen", function()
     M.open(true)
   end, { force = true, desc = "Follow the study link under the cursor" })
-  api.nvim_create_user_command("StudyBuild", backend.build, { force = true, desc = "Build the Rust study backend" })
+  api.nvim_create_user_command(
+    "StudyBuild",
+    backend.build,
+    { force = true, desc = "Build the Rust study backend" }
+  )
 end
 
 return M

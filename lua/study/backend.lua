@@ -24,10 +24,12 @@ function M.request(request)
     return nil, "Rust backend is missing. Run :StudyBuild or cargo install --path . --locked."
   end
   local success, result = pcall(function()
-    return vim.system({ executable, "--request" }, {
-      text = true,
-      stdin = vim.json.encode(request),
-    }):wait(config.options.timeout)
+    return vim
+      .system({ executable, "--request" }, {
+        text = true,
+        stdin = vim.json.encode(request),
+      })
+      :wait(config.options.timeout)
   end)
   if not success then
     return nil, tostring(result)
@@ -47,16 +49,21 @@ end
 
 function M.build()
   vim.notify("study.nvim: building the Rust backend")
-  local success, error = pcall(vim.system, { "cargo", "build", "--release", "--locked" }, {
-    cwd = M.root,
-    text = true,
-  }, vim.schedule_wrap(function(result)
-    if result.code == 0 then
-      vim.notify("study.nvim: backend is ready")
-    else
-      vim.notify("study.nvim: " .. result.stderr, vim.log.levels.ERROR)
-    end
-  end))
+  local success, error = pcall(
+    vim.system,
+    { "cargo", "build", "--release", "--locked" },
+    {
+      cwd = M.root,
+      text = true,
+    },
+    vim.schedule_wrap(function(result)
+      if result.code == 0 then
+        vim.notify("study.nvim: backend is ready")
+      else
+        vim.notify("study.nvim: " .. result.stderr, vim.log.levels.ERROR)
+      end
+    end)
+  )
   if not success then
     vim.notify("study.nvim: " .. tostring(error), vim.log.levels.ERROR)
   end
