@@ -1,0 +1,58 @@
+*study.txt*  Study workspaces and Markdown navigation for Neovim
+
+COMMANDS                                               *study-commands*
+
+:Study {topic}       Create or open a topic in the configured study root.
+                     Spaces in topic names do not need quotes here.
+:StudyOpen           Follow the Markdown link under the cursor.
+:StudyFolder {topic} Create a subtopic and add its link under "## Папки".
+                     Save the changed plan with :write.
+:StudyBuild          Build the Rust backend with Cargo asynchronously.
+
+MAPPINGS                                               *study-mappings*
+
+In a .study file:
+  <CR>               Follow a link; move to the next line if outside a link.
+
+In the study directory browser:
+  <CR>               Open the selected file or folder.
+  -                  Open the parent folder.
+  q                  Return to the original study plan.
+
+CONFIGURATION                                          *study-configuration*
+>
+  require("study").setup({
+    root = "~/study", -- Default: STUDY_ROOT or the current user's home/study.
+    binary = nil,    -- Default: target/release/study[.exe] or study in PATH.
+    timeout = 5000,
+    mappings = { open = "<CR>" }, -- false disables the mapping.
+    colors = {
+      text = "#FFFFFF",
+      link = "#61AFEF",
+      heading = "#FFFFFF",
+    },
+  })
+<
+The .study extension uses Markdown filetype, syntax, and optional Treesitter.
+Colors apply to study windows only, and retain the current theme background.
+Paths in links are resolved relative to the document.
+Only HTTP(S) URLs are opened in the system browser.
+
+TERMINAL                                               *study-terminal*
+>
+  cargo install --path . --locked
+  study ML
+  study "Linear algebra" --root ./learning
+<
+STUDY_ROOT overrides the default study directory.
+STUDY_NVIM specifies one Neovim executable, without shell arguments.
+The CLI waits for Neovim and reports a failed editor process.
+Existing plans are never truncated by opening a topic again.
+
+REQUIREMENTS                                           *study-requirements*
+
+Neovim 0.10+, Rust 1.88+, and Cargo.
+Supported platforms: Linux, macOS, Windows.
+No external directory browser or shell integration is required.
+
+vim:tw=78:ts=8:ft=help:norl:
