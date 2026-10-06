@@ -47,15 +47,9 @@ function M.open(explicit)
     end
     return false
   end
-  if target.kind == "url" then
-    local _, open_error = vim.ui.open(target.url)
-    if open_error then
-      report(open_error)
-    end
-  elseif target.kind == "file" or target.kind == "directory" then
-    vim.cmd.edit(vim.fn.fnameescape(target.path))
-  elseif target.kind == "anchor" then
-    report("Heading navigation will be available after the backend update")
+  local open_error = require("study.navigation").open(target)
+  if open_error then
+    report(open_error)
   end
   return true
 end

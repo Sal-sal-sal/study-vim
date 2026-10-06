@@ -13,6 +13,10 @@ use std::{
 #[derive(Deserialize)]
 #[serde(tag = "action", rename_all = "snake_case", deny_unknown_fields)]
 enum Request {
+    Heading {
+        text: String,
+        fragment: String,
+    },
     Create {
         topic: String,
         root: Option<PathBuf>,
@@ -27,6 +31,9 @@ enum Request {
 
 fn dispatch(request: Request) -> Result<Value> {
     match request {
+        Request::Heading { text, fragment } => {
+            Ok(json!({ "line": crate::markdown::anchors::heading_line(&text, &fragment)? }))
+        }
         Request::Create { topic, root } => {
             let root = resolve_root(root.as_deref())?;
             Ok(serde_json::to_value(create_topic(&root, &topic)?)?)
