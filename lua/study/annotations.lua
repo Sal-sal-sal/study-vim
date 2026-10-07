@@ -26,6 +26,12 @@ local function render(buffer, annotations)
         hl_group = "StudyNoteMarker",
         priority = 200,
       })
+    elseif mark.kind == "completed" then
+      api.nvim_buf_set_extmark(buffer, namespace, mark.row, mark.start_col, {
+        end_col = mark.end_col,
+        hl_group = "StudyCompleted",
+        priority = 210,
+      })
     end
   end
 end

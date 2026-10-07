@@ -12,6 +12,7 @@ local defaults = {
     heading2 = "#98C379",
     note = "#E5C07B",
     note_bg = "#29251C",
+    completed = "#39FF14",
   },
 }
 

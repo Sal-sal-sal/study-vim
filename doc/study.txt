@@ -34,6 +34,7 @@ CONFIGURATION                                          *study-configuration*
       heading2 = "#98C379", -- Second-level headings: ## Links.
       note = "#E5C07B",     -- Note marker >!.
       note_bg = "#29251C",  -- Note background.
+      completed = "#39FF14", -- Checked tasks and ~~struck text~~.
     },
   })
 <
@@ -54,6 +55,19 @@ marker:
 <
 Formatting follows edits without rewriting the file.
 Markers inside code blocks remain examples instead of becoming notes.
+
+COMPLETION                                             *study-completion*
+
+Use standard Markdown task markers or strikethrough:
+>
+  - [ ] Train a CNN.
+  - [x] Prepare the dataset.
+  ~~Review the chain rule.~~
+<
+Checked tasks ([x] or [X]) have bright-green, struck-through text.
+Wrapping text in ~~ also makes it bright-green and struck-through.
+Removing the marker restores normal formatting without saving the file.
+Code examples remain unstyled, and undo restores the corresponding formatting.
 
 TERMINAL                                               *study-terminal*
 >

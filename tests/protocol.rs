@@ -35,3 +35,19 @@ fn protocol_returns_structured_errors() {
         false
     );
 }
+
+#[test]
+fn annotations_parse_the_unsaved_editor_text() {
+    let response = request(json!({
+        "action": "annotations",
+        "text": ">! Заметка\n\n- [x] Готово\n\n~~Повторил~~"
+    }));
+    assert_eq!(response["ok"], true);
+    let marks = response["data"].as_array().unwrap();
+    assert_eq!(marks.len(), 3);
+    assert_eq!(marks[0]["kind"], "note");
+    assert_eq!(marks[0]["end_col"], ">! Заметка".len());
+    assert_eq!(marks[1]["kind"], "completed");
+    assert_eq!(marks[1]["row"], 2);
+    assert_eq!(marks[2]["row"], 4);
+}

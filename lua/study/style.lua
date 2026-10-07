@@ -7,6 +7,7 @@ local function define_colors()
   local colors = require("study.config").options.colors
   api.nvim_set_hl(namespace, "StudyNote", { bg = colors.note_bg, italic = true })
   api.nvim_set_hl(namespace, "StudyNoteMarker", { fg = colors.note, bold = true })
+  api.nvim_set_hl(namespace, "StudyCompleted", { fg = colors.completed, strikethrough = true })
   for _, name in ipairs({ "Normal", "NormalNC" }) do
     local attributes = api.nvim_get_hl(0, { name = name, link = false })
     attributes.fg = colors.text

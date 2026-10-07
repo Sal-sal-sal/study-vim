@@ -47,3 +47,32 @@ assert(vim.wait(3000, function()
   return #marks() == 0
 end))
 print("study.nvim note rendering and edit lifecycle tests passed")
+
+api.nvim_buf_set_lines(buffer, 0, -1, false, {
+  "- [ ] Pending",
+  "- [x] Готово",
+  "~~Повторил~~",
+  "`~~Код~~`",
+  "```",
+  "- [x] Пример",
+  "```",
+})
+assert(vim.wait(3000, function()
+  local current = marks()
+  return #current == 2 and current[1][2] == 1 and current[2][2] == 2
+end))
+vim.bo[buffer].undolevels = vim.bo[buffer].undolevels
+api.nvim_buf_set_lines(buffer, 1, 3, false, { "- [ ] Готово", "Повторил" })
+assert(vim.wait(3000, function()
+  return #marks() == 0
+end))
+vim.cmd("normal! u")
+assert(vim.wait(3000, function()
+  return #marks() == 2
+end))
+assert(api.nvim_buf_get_lines(buffer, 1, 2, false)[1] == "- [x] Готово")
+local styled_tick = api.nvim_buf_get_changedtick(buffer)
+vim.cmd("doautocmd ColorScheme")
+assert(api.nvim_buf_get_changedtick(buffer) == styled_tick)
+assert(#marks() == 2)
+print("study.nvim completed tasks, strikes, edits and undo tests passed")
