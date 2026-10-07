@@ -5,7 +5,12 @@ local defaults = {
   timeout = 5000,
   spell = false,
   mappings = { open = "<CR>" },
-  colors = { text = "#FFFFFF", link = "#61AFEF", heading = "#FFFFFF" },
+  colors = {
+    text = "#FFFFFF",
+    link = "#61AFEF",
+    heading = "#FFFFFF",
+    heading2 = "#98C379",
+  },
 }
 
 M.options = vim.deepcopy(defaults)

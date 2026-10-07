@@ -29,9 +29,13 @@ local function define_colors()
   api.nvim_set_hl(namespace, "@markup.heading", { fg = colors.heading, bold = true })
   api.nvim_set_hl(namespace, "StudyDirectoryTitle", { fg = colors.heading, bold = true })
   for level = 1, 6 do
+    local color = level == 2 and colors.heading2 or colors.heading
     for _, name in ipairs({ "@markup.heading." .. level .. ".markdown", "markdownH" .. level }) do
-      api.nvim_set_hl(namespace, name, { fg = colors.heading, bold = true })
+      api.nvim_set_hl(namespace, name, { fg = color, bold = true })
     end
+  end
+  for _, name in ipairs({ "@markup.heading.2", "markdownH2Delimiter" }) do
+    api.nvim_set_hl(namespace, name, { fg = colors.heading2, bold = true })
   end
 end
 

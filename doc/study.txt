@@ -31,11 +31,13 @@ CONFIGURATION                                          *study-configuration*
       text = "#FFFFFF",
       link = "#61AFEF",
       heading = "#FFFFFF",
+      heading2 = "#98C379", -- Second-level headings: ## Links.
     },
   })
 <
 The .study extension uses Markdown filetype, syntax, and optional Treesitter.
 Colors apply to study windows only, and retain the current theme background.
+Second-level headings (##) use colors.heading2, green by default.
 Automatic spelling highlights are disabled in study windows by default.
 The previous spell setting is restored when leaving the study window.
 Paths in links are resolved relative to the document.
