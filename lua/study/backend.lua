@@ -18,6 +18,20 @@ function M.binary()
   return nil
 end
 
+local function decode(result)
+  if result.code ~= 0 then
+    return nil, result.stderr ~= "" and result.stderr or "Rust request failed or timed out"
+  end
+  local decoded, response = pcall(vim.json.decode, result.stdout)
+  if not decoded or type(response) ~= "table" or type(response.ok) ~= "boolean" then
+    return nil, "Rust backend returned an invalid response"
+  end
+  if not response.ok then
+    return nil, response.error
+  end
+  return response.data
+end
+
 function M.request(request)
   local executable = M.binary()
   if not executable then
@@ -34,17 +48,30 @@ function M.request(request)
   if not success then
     return nil, tostring(result)
   end
-  if result.code ~= 0 then
-    return nil, result.stderr ~= "" and result.stderr or "Rust request failed or timed out"
+  return decode(result)
+end
+
+function M.request_async(request, callback)
+  local executable = M.binary()
+  if not executable then
+    callback(nil, "Rust backend is missing. Run :StudyBuild or cargo install --path . --locked.")
+    return
   end
-  local decoded, response = pcall(vim.json.decode, result.stdout)
-  if not decoded or type(response) ~= "table" or type(response.ok) ~= "boolean" then
-    return nil, "Rust backend returned an invalid response"
+  local success, error = pcall(
+    vim.system,
+    { executable, "--request" },
+    {
+      text = true,
+      stdin = vim.json.encode(request),
+      timeout = config.options.timeout,
+    },
+    vim.schedule_wrap(function(result)
+      callback(decode(result))
+    end)
+  )
+  if not success then
+    callback(nil, tostring(error))
   end
-  if not response.ok then
-    return nil, response.error
-  end
-  return response.data
 end
 
 function M.build()
@@ -59,6 +86,7 @@ function M.build()
     vim.schedule_wrap(function(result)
       if result.code == 0 then
         vim.notify("study.nvim: backend is ready")
+        vim.api.nvim_exec_autocmds("User", { pattern = "StudyBackendReady" })
       else
         vim.notify("study.nvim: " .. result.stderr, vim.log.levels.ERROR)
       end

@@ -10,6 +10,7 @@ function M.setup(options)
   require("study.commands").setup()
   require("study.buffers").setup()
   require("study.style").setup()
+  require("study.annotations").setup()
 end
 
 return M

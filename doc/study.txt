@@ -32,6 +32,8 @@ CONFIGURATION                                          *study-configuration*
       link = "#61AFEF",
       heading = "#FFFFFF",
       heading2 = "#98C379", -- Second-level headings: ## Links.
+      note = "#E5C07B",     -- Note marker >!.
+      note_bg = "#29251C",  -- Note background.
     },
   })
 <
@@ -42,6 +44,16 @@ Automatic spelling highlights are disabled in study windows by default.
 The previous spell setting is restored when leaving the study window.
 Paths in links are resolved relative to the document.
 Only HTTP(S) URLs are opened in the system browser.
+
+NOTES                                                  *study-notes*
+
+Start a line with ">! " to give it a warm background, italic text, and a gold
+marker:
+>
+  >! Conv2d input uses the shape (N, C, H, W).
+<
+Formatting follows edits without rewriting the file.
+Markers inside code blocks remain examples instead of becoming notes.
 
 TERMINAL                                               *study-terminal*
 >

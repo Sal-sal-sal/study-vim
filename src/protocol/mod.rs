@@ -13,6 +13,9 @@ use std::{
 #[derive(Deserialize)]
 #[serde(tag = "action", rename_all = "snake_case", deny_unknown_fields)]
 enum Request {
+    Annotations {
+        text: String,
+    },
     Folder {
         document: PathBuf,
         topic: String,
@@ -38,6 +41,9 @@ enum Request {
 
 fn dispatch(request: Request) -> Result<Value> {
     match request {
+        Request::Annotations { text } => Ok(serde_json::to_value(
+            crate::markdown::annotations::annotations(&text),
+        )?),
         Request::Folder { document, topic } => {
             let parent = document
                 .parent()

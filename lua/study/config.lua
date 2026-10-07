@@ -10,6 +10,8 @@ local defaults = {
     link = "#61AFEF",
     heading = "#FFFFFF",
     heading2 = "#98C379",
+    note = "#E5C07B",
+    note_bg = "#29251C",
   },
 }
 
